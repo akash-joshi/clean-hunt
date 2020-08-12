@@ -4,7 +4,7 @@ import axios from "axios";
 import "./styles.css";
 
 const Link = ({ url }) => (
-  <a target="_blank" href={url}>
+  <a target="_blank" rel="noopener noreferrer" href={url}>
     {url}
   </a>
 );
@@ -17,14 +17,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   console.log(results);
-
-  const debounce = (f, ms) => {
-    let timeout;
-    return () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(f, ms);
-    };
-  };
 
   const handleSearch = (e) => {
     e.preventDefault();

@@ -10,11 +10,11 @@ const Link = ({ url }) => (
 );
 
 export default function App() {
-  const [page, setPage] = useState(1);
-  const [nbPages, setNbPages] = useState(2);
+  const [page, setPage] = useState(0);
+  const [nbPages, setNbPages] = useState(1);
   const [results, setResults] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   console.log(results);
 
@@ -101,6 +101,25 @@ export default function App() {
     <div
       style={{ maxWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}
     >
+      <h1>CleanHunt</h1>
+
+      <details>
+        <summary
+          style={{ fontWeight: "bold", fontSize: "1.5em", marginBottom: "1em" }}
+        >
+          The Power of ProductHunt search without all the dead links.
+        </summary>
+        Have you ever searched something on ProductHunt and faced difficulty
+        while perusing, due to all the dead products? Introducing CleanHunt, a
+        product which uses the existing ProductHunt API and discards those
+        products from the results which don't have a live landing page. While
+        not a perfect method to check for dead products, all startups which are
+        no longer active don't pay their domain renewal fees, or don't host a
+        webpage behind it. This is what we try to look for.
+        <br />
+        <br />
+      </details>
+
       <form onSubmit={handleSearch}>
         <input
           onChange={(e) => setSearchText(e.target.value)}
@@ -122,12 +141,11 @@ export default function App() {
         </div>
       ))}
 
-      {page <= nbPages && !loading && results.length > 0 ? (
+      {page < nbPages && !loading && results.length > 0 && (
         <button onClick={loadMore}>Load More</button>
-      ) : (
-        "No Results"
       )}
-      {page <= nbPages && loading && results.length > 0 && "Loading ..."}
+      {results.length === 0 && !loading && "No Results."}
+      {loading && "Loading ..."}
     </div>
   );
 }

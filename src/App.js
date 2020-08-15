@@ -179,12 +179,16 @@ function App() {
         <>
           <br />
           No Results.
+          <br />
+          <br />
         </>
       )}
       {loading && (
         <>
           <br />
           Loading...
+          <br />
+          <br />
         </>
       )}
 

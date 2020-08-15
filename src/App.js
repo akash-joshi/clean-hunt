@@ -7,9 +7,9 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Input, Button } from "semantic-ui-react";
 
-const Link = ({ url, text }) => (
-  <a target="_blank" rel="noopener noreferrer" href={url}>
-    {text} ⬈
+const Link = ({ url, text, style }) => (
+  <a style={{...style}} target="_blank" rel="noopener noreferrer" href={url}>
+    {text} 
   </a>
 );
 
@@ -159,11 +159,11 @@ function App() {
           <div>
             <Link
               url={`https://www.producthunt.com${result.url}`}
-              text={"PH Link"}
+              text={"PH Link ⬈"}
             />
           </div>
           <div>
-            <Link url={result.product_links[0].url} text={"Product Link"} />
+            <Link url={result.product_links[0].url} text={"Product Link ⬈"} />
           </div>
         </div>
       ))}
@@ -187,6 +187,8 @@ function App() {
           Loading...
         </>
       )}
+
+      <Link style={{textDecoration:"underline"}} url={"https://github.com/akash-joshi/clean-hunt"} text={"An Open Source Production"} />
     </div>
   );
 }

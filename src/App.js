@@ -9,7 +9,7 @@ import { Input, Button } from "semantic-ui-react";
 
 const Link = ({ url, text }) => (
   <a target="_blank" rel="noopener noreferrer" href={url}>
-    {text} 🡕
+    {text} ⬈
   </a>
 );
 

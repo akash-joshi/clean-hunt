@@ -110,7 +110,12 @@ function App() {
 
   return (
     <div
-      style={{ maxWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}
+      style={{
+        maxWidth: "1000px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        padding: "1em",
+      }}
     >
       <h1>CleanHunt</h1>
 

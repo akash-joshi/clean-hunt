@@ -1,64 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { hot } from "react-hot-loader";
 
 import "./styles.css";
+import "semantic-ui-css/semantic.min.css";
 
-const Link = ({ url }) => (
+import { Input, Button } from "semantic-ui-react";
+
+const Link = ({ url, text }) => (
   <a target="_blank" rel="noopener noreferrer" href={url}>
-    {url}
+    {text} 🡕
   </a>
 );
 
-export default function App() {
+function App() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get("q");
+
+  const initialSearch = myParam ? myParam : "";
+
   const [page, setPage] = useState(0);
   const [nbPages, setNbPages] = useState(1);
   const [results, setResults] = useState([]);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(initialSearch);
   const [loading, setLoading] = useState(false);
 
   console.log(results);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const handleSearch = (searchText) => {
+      setLoading(true);
+      setPage(0);
+      setNbPages(1);
+      setResults([]);
 
-    setLoading(true);
-    setPage(1);
-    setNbPages(2);
-    setResults([]);
+      axios
+        .get(
+          `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=0`,
+          {
+            headers: {
+              "X-Algolia-API-Key": "9670d2d619b9d07859448d7628eea5f3",
+              "X-Algolia-Application-Id": "0H4SMABBSG",
+            },
+          }
+        )
+        .then(async (r) => {
+          setNbPages(r.data.nbPages);
 
-    axios
-      .get(
-        `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=${page}`,
-        {
-          headers: {
-            "X-Algolia-API-Key": "9670d2d619b9d07859448d7628eea5f3",
-            "X-Algolia-Application-Id": "0H4SMABBSG",
-          },
-        }
-      )
-      .then(async (r) => {
-        setNbPages(r.data.nbPages);
+          await Promise.all(
+            r.data.hits.map(async (hit) => {
+              try {
+                console.log(hit.product_links[0].url);
+                await axios.get(
+                  `${process.env.REACT_APP_TEST_URL}?url=${hit.product_links[0].url}`
+                );
+                setResults((results) => {
+                  const nextResults = [...new Set([...results, hit])];
+                  return nextResults;
+                });
+              } catch (error) {
+                console.error(error);
+              }
+            })
+          );
 
-        await Promise.all(
-          r.data.hits.map(async (hit) => {
-            try {
-              console.log(hit.product_links[0].url);
-              await axios.get(
-                `${process.env.REACT_APP_TEST_URL}?url=${hit.product_links[0].url}`
-              );
-              setResults((results) => {
-                const nextResults = [...new Set([...results, hit])];
-                return nextResults;
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          })
-        );
+          setLoading(false);
+        });
+    };
 
-        setLoading(false);
-      });
-  };
+    handleSearch(initialSearch);
+  }, [initialSearch]);
 
   const loadMore = () => {
     setPage(page + 1);
@@ -120,32 +131,59 @@ export default function App() {
         <br />
       </details>
 
-      <form onSubmit={handleSearch}>
-        <input
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          document.location.href = `?q=${searchText}`;
+        }}
+      >
+        <Input
+          style={{ marginRight: "0.5em" }}
           onChange={(e) => setSearchText(e.target.value)}
           placeholder="Search Here..."
+          defaultValue={searchText}
         />
-        <button type="submit">Search</button>
+        <Button type="submit">Search</Button>
       </form>
       {results.map((result, index) => (
         <div style={{ marginTop: "1em", marginBottom: "1em" }} key={index}>
           <div>
             {index + 1}. {result.name}
           </div>
+          <div>Points: {result.vote_count}</div>
           <div>
-            PH Link: <Link url={`https://www.producthunt.com${result.url}`} />
+            <Link
+              url={`https://www.producthunt.com${result.url}`}
+              text={"PH Link"}
+            />
           </div>
           <div>
-            Product Link: <Link url={result.product_links[0].url} />
+            <Link url={result.product_links[0].url} text={"Product Link"} />
           </div>
         </div>
       ))}
 
       {page < nbPages && !loading && results.length > 0 && (
-        <button onClick={loadMore}>Load More</button>
+        <>
+          <Button onClick={loadMore}>Load More</Button>
+          <br />
+          <br />
+        </>
       )}
-      {results.length === 0 && !loading && "No Results."}
-      {loading && "Loading ..."}
+      {results.length === 0 && !loading && (
+        <>
+          <br />
+          No Results.
+        </>
+      )}
+      {loading && (
+        <>
+          <br />
+          Loading...
+        </>
+      )}
     </div>
   );
 }
+
+export default hot(module)(App);

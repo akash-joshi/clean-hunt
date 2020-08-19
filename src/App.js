@@ -121,6 +121,7 @@ function App() {
       <a style={{ color: "#f79862" }} href="/">
         <h1 style={{ display: "flex", alignItems: "center" }}>
           <img
+            alt="logo"
             style={{ height: "2em", marginRight: "0.3em" }}
             src="/inline-logo.png"
           />{" "}

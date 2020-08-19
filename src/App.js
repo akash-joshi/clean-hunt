@@ -8,8 +8,8 @@ import "semantic-ui-css/semantic.min.css";
 import { Input, Button } from "semantic-ui-react";
 
 const Link = ({ url, text, style }) => (
-  <a style={{...style}} target="_blank" rel="noopener noreferrer" href={url}>
-    {text} 
+  <a style={{ ...style }} target="_blank" rel="noopener noreferrer" href={url}>
+    {text}
   </a>
 );
 
@@ -36,7 +36,7 @@ function App() {
 
       axios
         .get(
-          `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=0`,
+          `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=0&hitsPerPage=15`,
           {
             headers: {
               "X-Algolia-API-Key": "9670d2d619b9d07859448d7628eea5f3",
@@ -64,6 +64,7 @@ function App() {
             })
           );
 
+          console.log("fin");
           setLoading(false);
         });
     };
@@ -117,8 +118,17 @@ function App() {
         padding: "1em",
       }}
     >
-      <h1>CleanHunt</h1>
+      <a style={{ color: "#f79862" }} href="/">
+        <h1 style={{ display: "flex", alignItems: "center" }}>
+          <img
+            style={{ height: "2em", marginRight: "0.3em" }}
+            src="/inline-logo.png"
+          />{" "}
+          <span>CleanHunt</span>
+        </h1>
+      </a>
 
+      <br />
       <details>
         <summary
           style={{ fontWeight: "bold", fontSize: "1.5em", marginBottom: "1em" }}
@@ -192,7 +202,11 @@ function App() {
         </>
       )}
 
-      <Link style={{textDecoration:"underline"}} url={"https://github.com/akash-joshi/clean-hunt"} text={"An Open Source Production"} />
+      <Link
+        style={{ textDecoration: "underline" }}
+        url={"https://github.com/akash-joshi/clean-hunt"}
+        text={"An Open Source Production"}
+      />
     </div>
   );
 }

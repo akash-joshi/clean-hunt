@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { hot } from "react-hot-loader";
+import "semantic-ui-css/semantic.min.css";
+import styled from "styled-components";
 
 import "./styles.css";
-import "semantic-ui-css/semantic.min.css";
 
 import { Input, Button } from "semantic-ui-react";
 
+const mainOrange = `#f79862`;
+
 const Link = ({ url, text, style }) => (
-  <a style={{ ...style }} target="_blank" rel="noopener noreferrer" href={url}>
+  <a
+    style={{ ...style, color: mainOrange }}
+    target="_blank"
+    rel="noopener noreferrer"
+    href={url}
+  >
     {text}
   </a>
 );
+
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  @media only screen and (max-width: 1000px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -130,11 +149,11 @@ function App() {
       </a>
 
       <br />
-      <details>
+      <details style={{ color: mainOrange }}>
         <summary
           style={{ fontWeight: "bold", fontSize: "1.5em", marginBottom: "1em" }}
         >
-          The Power of ProductHunt search without all the dead links.
+          The Power of ProductHunt search without a Sea of Dead Links.
         </summary>
         Have you ever searched something on ProductHunt and faced difficulty
         while perusing, due to all the dead products? Introducing CleanHunt, a
@@ -148,66 +167,123 @@ function App() {
       </details>
 
       <form
+        style={{ display: "flex", alignItems: "center" }}
         onSubmit={(e) => {
           e.preventDefault();
           document.location.href = `?q=${searchText}`;
         }}
       >
         <Input
-          style={{ marginRight: "0.5em" }}
+          style={{ width: "90%" }}
           onChange={(e) => setSearchText(e.target.value)}
           placeholder="Search Here..."
           defaultValue={searchText}
-        />
-        <Button type="submit">Search</Button>
+          autofocus={true}
+        >
+          <input
+            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          />
+        </Input>
+        <Button
+          style={{
+            background: mainOrange,
+            color: "white",
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            height: 38,
+          }}
+          type="submit"
+        >
+          Search
+        </Button>
       </form>
-      {results.map((result, index) => (
-        <div style={{ marginTop: "1em", marginBottom: "1em" }} key={index}>
-          <div>
-            {index + 1}. {result.name}
-          </div>
-          <div>Points: {result.vote_count}</div>
-          <div>
-            <Link
-              url={`https://www.producthunt.com${result.url}`}
-              text={"PH Link ⬈"}
+      <CardGrid>
+        {results.map((result, index) => (
+          <div
+            style={{
+              marginTop: "1em",
+              marginBottom: "1em",
+              boxShadow: "0 1px 4px 0 rgba(0,0,0,.1)",
+              borderRadius: 8,
+              textAlign: "center",
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "90%",
+              padding: "1em",
+            }}
+            key={index}
+          >
+            <img
+              style={{ height: "80px" }}
+              src={result.thumbnail.image_url.split("?")[0]}
+              alt="Product"
             />
-          </div>
-          <div>
-            <Link url={result.product_links[0].url} text={"Product Link ⬈"} />
-          </div>
-        </div>
-      ))}
+            <div style={{ fontSize: 20, margin: "1em 0" }}>{result.name}</div>
 
-      {page < nbPages && !loading && results.length > 0 && (
-        <>
-          <Button onClick={loadMore}>Load More</Button>
-          <br />
-          <br />
-        </>
-      )}
-      {results.length === 0 && !loading && (
-        <>
-          <br />
-          No Results.
-          <br />
-          <br />
-        </>
-      )}
-      {loading && (
-        <>
-          <br />
-          Loading...
-          <br />
-          <br />
-        </>
-      )}
+            <div
+              style={{
+                fontSize: 24,
+                marginTop: "1em",
+                marginBottom: "0.5em",
+                color: mainOrange,
+              }}
+            >
+              {result.vote_count}
+            </div>
+            <div
+              style={{ fontSize: 18, marginBottom: "1em", color: "#6f6f6f" }}
+            >
+              POINTS
+            </div>
+            <div style={{ fontSize: 16 }}>
+              <Link
+                url={`https://www.producthunt.com${result.url}`}
+                text={"PH Link ⬈"}
+              />
+            </div>
+            <div style={{ fontSize: 16 }}>
+              <Link url={result.product_links[0].url} text={"Product Link ⬈"} />
+            </div>
+          </div>
+        ))}
+      </CardGrid>
 
-      <Link
-        style={{ textDecoration: "underline" }}
-        url={"https://github.com/akash-joshi/clean-hunt"}
-        text={"An Open Source Production"}
-      />
+      <div style={{ textAlign: "center" }}>
+        {page < nbPages && !loading && results.length > 0 && (
+          <>
+            <Button
+              style={{ background: mainOrange, color: "white" }}
+              onClick={loadMore}
+            >
+              Load More
+            </Button>
+            <br />
+            <br />
+          </>
+        )}
+        {results.length === 0 && !loading && (
+          <>
+            <br />
+            <span style={{ color: mainOrange }}>No Results.</span>
+            <br />
+            <br />
+          </>
+        )}
+        {loading && (
+          <>
+            <br />
+            <span style={{ color: mainOrange }}>Loading...</span>
+            <br />
+            <br />
+          </>
+        )}
+
+        <Link
+          style={{ textDecoration: "underline" }}
+          url={"https://github.com/akash-joshi/clean-hunt"}
+          text={"An Open Source Production"}
+        />
+      </div>
     </div>
   );
 }

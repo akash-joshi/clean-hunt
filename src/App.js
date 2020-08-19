@@ -167,7 +167,7 @@ function App() {
       </details>
 
       <form
-        style={{ display: "flex", alignItems: "center" }}
+        style={{ display: "flex", alignItems: "center", marginBottom: "1em" }}
         onSubmit={(e) => {
           e.preventDefault();
           document.location.href = `?q=${searchText}`;
@@ -236,13 +236,13 @@ function App() {
               POINTS
             </div>
             <div style={{ fontSize: 16 }}>
-              <Link
-                url={`https://www.producthunt.com${result.url}`}
-                text={"PH Link ⬈"}
-              />
+              <Link url={result.product_links[0].url} text={"View Product ⬈"} />
             </div>
             <div style={{ fontSize: 16 }}>
-              <Link url={result.product_links[0].url} text={"Product Link ⬈"} />
+              <Link
+                url={`https://www.producthunt.com${result.url}`}
+                text={"View on PH ⬈"}
+              />
             </div>
           </div>
         ))}

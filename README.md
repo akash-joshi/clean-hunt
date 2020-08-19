@@ -1,6 +1,6 @@
-<div style="text-align:center;">
-<img src="https://raw.githubusercontent.com/akash-joshi/clean-hunt/master/public/logo.png" height="500" align="center" />
-</div>
+<p align="center">
+<img src="https://raw.githubusercontent.com/akash-joshi/clean-hunt/master/public/logo.png" height="400"  />
+</p>
 
 # CleanHunt
 

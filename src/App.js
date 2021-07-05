@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { hot } from "react-hot-loader";
-import "semantic-ui-css/semantic.min.css";
 import styled from "styled-components";
+import dayjs from "dayjs"
 
+import "semantic-ui-css/semantic.min.css";
 import "./styles.css";
+
 
 import { Input, Button } from "semantic-ui-react";
 
@@ -88,6 +90,10 @@ function App() {
         });
     };
 
+    if (window.location.href.search("netlify.app") > -1) {
+      window.location.href = "https://cleanhunt.akashj.com"
+    }
+
     handleSearch(initialSearch);
   }, [initialSearch]);
 
@@ -96,8 +102,7 @@ function App() {
     setLoading(true);
     axios
       .get(
-        `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=${
-          page + 1
+        `https://0h4smabbsg-dsn.algolia.net/1/indexes/Post_production?query=${searchText}&page=${page + 1
         }`,
         {
           headers: {
@@ -231,9 +236,12 @@ function App() {
               {result.vote_count}
             </div>
             <div
-              style={{ fontSize: 18, marginBottom: "1em", color: "#6f6f6f" }}
+              style={{ fontSize: 18, marginBottom: "0.3em", color: "#6f6f6f" }}
             >
               POINTS
+            </div>
+            <div style={{ marginBottom: "0.5em" }}>
+              on {dayjs(result.created_at).format("DD MMM, YYYY")}
             </div>
             <div style={{ fontSize: 16 }}>
               <Link url={result.product_links[0].url} text={"View Product ⬈"} />
@@ -278,21 +286,37 @@ function App() {
           </>
         )}
 
-        <span style={{ marginRight: "1em" }}>
+        <div>
+          <span style={{ marginRight: "1em" }}>
+            <Link
+              style={{ textDecoration: "underline" }}
+              url={"https://github.com/akash-joshi/clean-hunt"}
+              text={"An Open Source Production"}
+            />
+          </span>
+
           <Link
             style={{ textDecoration: "underline" }}
-            url={"https://github.com/akash-joshi/clean-hunt"}
-            text={"An Open Source Production"}
+            url={
+              "https://rapidapi.com/jakash1997/api/website-data-gathering-and-update-tracking"
+            }
+            text={"Source API"}
           />
-        </span>
+        </div>
 
-        <Link
-          style={{ textDecoration: "underline" }}
-          url={
-            "https://rapidapi.com/jakash1997/api/website-data-gathering-and-update-tracking"
-          }
-          text={"Source API"}
-        />
+        <br />
+
+        <div style={{ marginBottom: "1em" }}>
+          Made by <Link
+            style={{ textDecoration: "underline" }}
+            url={
+              "https://thewriting.dev"
+            }
+            text={"The Writing Dev"}
+          />
+        </div>
+
+
       </div>
     </div>
   );

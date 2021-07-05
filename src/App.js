@@ -91,7 +91,7 @@ function App() {
     };
 
     if (window.location.href.search("netlify.app") > -1) {
-      window.location.href = "https://cleanhunt.akashj.com"
+      window.location.href = "https://cleanhunt.thewriting.dev"
     }
 
     handleSearch(initialSearch);

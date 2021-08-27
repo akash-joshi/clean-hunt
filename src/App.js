@@ -72,9 +72,9 @@ function App() {
             r.data.hits.map(async (hit) => {
               try {
                 console.log(hit.product_links[0].url);
-                await axios.get(
-                  `${process.env.REACT_APP_TEST_URL}?url=${hit.product_links[0].url}`
-                );
+                
+                await axios.get(`https://upcheck.vercel.app/api?url=${hit.product_links[0].url}`)
+
                 setResults((results) => {
                   const nextResults = [...new Set([...results, hit])];
                   return nextResults;
@@ -116,9 +116,8 @@ function App() {
           r.data.hits.map(async (hit) => {
             try {
               console.log(hit.product_links[0].url);
-              await axios.get(
-                `${process.env.REACT_APP_TEST_URL}?url=${hit.product_links[0].url}`
-              );
+
+              await axios.get(`https://upcheck.vercel.app/api?url=${hit.product_links[0].url}`)
               setResults((results) => {
                 const nextResults = [...new Set([...results, hit])];
                 return nextResults;

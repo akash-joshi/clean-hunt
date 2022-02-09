@@ -68,24 +68,23 @@ function App() {
         .then(async (r) => {
           setNbPages(r.data.nbPages);
 
-          await Promise.all(
-            r.data.hits.map(async (hit) => {
-              try {
-                console.log(hit.product_links[0].url);
-                
-                await axios.get(`https://upcheck.vercel.app/api?url=${hit.product_links[0].url}`)
+          // await Promise.all(
+          //   r.data.hits.map(async (hit) => {
+          //     try {              
+          //       await axios.get(`https://upcheck.vercel.app/api?url=${hit.product_links[0].url}`)
 
-                setResults((results) => {
-                  const nextResults = [...new Set([...results, hit])];
-                  return nextResults;
-                });
-              } catch (error) {
-                console.error(error);
-              }
-            })
-          );
+          //       setResults((results) => {
+          //         const nextResults = [...new Set([...results, hit])];
+          //         return nextResults;
+          //       });
+          //     } catch (error) {
+          //       console.error(error);
+          //     }
+          //   })
+          // );
 
-          console.log("fin");
+          setResults(r.data.hits);
+
           setLoading(false);
         });
     };

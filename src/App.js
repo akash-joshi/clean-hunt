@@ -218,7 +218,7 @@ function App() {
           >
             <img
               style={{ height: "80px" }}
-              src={result.thumbnail.image_url.split("?")[0]}
+              src={`https://ph-files.imgix.net/${result.thumbnail_image_uuid}`}
               alt="Product"
             />
             <div style={{ fontSize: 20, margin: "1em 0" }}>{result.name}</div>
